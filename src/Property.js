@@ -18,7 +18,7 @@ const GET_PROPERTIES = gql`
 `;
 const Properties = () => (
   <Query query={GET_PROPERTIES}
-  pollInterval={5000}>
+    pollInterval={5000}>
     {({ loading, error, data, networkStatus }) => {
         if (networkStatus === 4) return "Refetching!";
         if (loading) return null;
