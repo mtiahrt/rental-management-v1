@@ -1,6 +1,13 @@
 import React from 'react';
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import { Card, Button, CardImg, CardTitle, CardText, CardDeck,
+  CardSubtitle, CardBody } from 'reactstrap';
+
+  let x;
+ x = data =>{
+  return <div></div>
+}
 
 const GET_PROPERTIES = gql`
 {allProperties(condition: {flagdeleted: false}){
@@ -24,30 +31,23 @@ const Properties = () => (
         if (loading) return null;
         if (error) return `Error!: ${error}`;
         return(
-          <div style={propertyStyle}>
-          {data.allProperties.edges.map(property => 
-            <div>
-              <p>{property.node.propertyaddress}</p>
-              <p>{property.node.propertycity}</p>
-              <p>{property.node.propertystate}</p>
-              <p>{window.location.href}</p>
-              <img alt="my" src={property.node.imageurl} style={{ height: 300, width: 350 }} />
-            </div>
-            )}
-          </div>
+          // x(data));
+          <CardDeck>
+            {data.allProperties.edges.map(property => 
+              <Card id ={property.node.propertyid}>
+                <CardImg top width="100%" src={property.node.imageurl} alt="Card image cap" />          
+                <CardBody>
+                  <CardTitle>{property.node.propertyaddress}</CardTitle>
+                  <CardSubtitle>{property.node.propertycity}, {property.node.propertystate}</CardSubtitle>
+                  <CardText>This is a 3 unit 9 Bedroom property that is renting for $3020.00 a month</CardText>
+                  <Button>Work with this Property</Button>
+                </CardBody>
+              </Card>
+              )}
+          </CardDeck>
         )
     }}
   </Query>
 )
-
-
-let propertyStyle = {
-    color: 'black',
-    fontFamily: 'Lucida Calligraphy Italic',
-    fontSize: '17px',
-    width: "25%", 
-    display: "inline-block",
-    padding: '10px'
-    }
 
 export default Properties;

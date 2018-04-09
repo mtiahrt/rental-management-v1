@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import './App.css';
+import {Container} from 'reactstrap';
 import Properties from './Property';
-import LeftSideBar from './LeftSideBar';
 import Header from './Header';
 
 import Example from './Example';
-import Example2 from './Example2';
 
 const client = new ApolloClient({
-  uri: "http://localhost:5000/graphql"
+  uri: "http://localhost:5000/graphql",
+  batchInterval: 10
 });
 
 // function orderTotal (order) {
@@ -24,11 +24,11 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <div className="App">
+        <Container>
           <Header></Header>
           <Example/>
-          {/* <Example2 /> */}
-          <LeftSideBar></LeftSideBar>
           <Properties></Properties>
+          </Container>
         </div>
       </ApolloProvider>
     );
