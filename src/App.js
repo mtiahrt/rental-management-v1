@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import './App.css';
+import './NavBar.css';
 import {Container} from 'reactstrap';
 import Header from './Header';
 import NavBar from './NavBar';

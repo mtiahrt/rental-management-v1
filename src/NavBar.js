@@ -46,7 +46,7 @@ export default class NabBar extends React.Component {
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    Option 1
+                    Add a Property
                   </DropdownItem>
                   <DropdownItem>
                     Option 2

@@ -18,8 +18,6 @@ const query = gql`
  }
 }
 `;
-
-
 class Houses extends React.Component {
     render(){
     let data = this.props.data
@@ -33,9 +31,9 @@ class Houses extends React.Component {
       <div id="properties">
       <Row>
         {data.allProperties.edges.map(( item, index) => {
-          return <Col key={item.node.propertyid} sm="4"><HouseItem key={item.node.propertyid} houseItem={item.node}/></Col>
+          return <Col sm="4" key={item.node.propertyid} ><HouseItem key={item.node.propertyid} houseItem={item.node}/></Col>
         })}
-        </Row>
+      </Row>
     </div>     
     )}
 }
