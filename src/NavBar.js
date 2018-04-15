@@ -49,7 +49,7 @@ export default class NabBar extends React.Component {
                     Add a Property
                   </DropdownItem>
                   <DropdownItem>
-                    Option 2
+                  Portfolio and Tax Reporting Documents
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem>

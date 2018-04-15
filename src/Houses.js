@@ -3,6 +3,7 @@ import {graphql } from 'react-apollo'
 import gql from "graphql-tag";
 import {Row, Col} from 'reactstrap';
 import HouseItem from './HouseItem';
+import {Link} from 'react-router-dom';
 
 const query = gql`
 {allProperties(condition: {flagdeleted: false}){
@@ -31,7 +32,9 @@ class Houses extends React.Component {
       <div id="properties">
       <Row>
         {data.allProperties.edges.map(( item, index) => {
-          return <Col sm="4" key={item.node.propertyid} ><HouseItem key={item.node.propertyid} houseItem={item.node}/></Col>
+          return <Col sm="4" key={item.node.propertyid} >
+            <Link to={`/propertyID/${item.node.propertyid}`}><HouseItem key={item.node.propertyid} houseItem={item.node}/></Link>
+                 </Col>
         })}
       </Row>
     </div>     
