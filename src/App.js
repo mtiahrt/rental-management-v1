@@ -31,7 +31,7 @@ class App extends Component {
             <NavBar/>
             <Container>
               <Route exact={true} path="/" component={Houses} />
-              <Route path="/propertyID/:propertyId" component={HouseItemDetails}/>
+              <Route {...this.props} path="/propertyID/:propertyId" render={() => <HouseItemDetails {...this.props}/>}/>
             </Container>
           </div>
       </ApolloProvider>

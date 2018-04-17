@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {graphql } from 'react-apollo'
 import gql from "graphql-tag";
 import { Jumbotron, Button} from 'reactstrap';
+import {withRouter} from 'react-router-dom'
 
 let data
 const query = gql`query(
@@ -50,11 +51,7 @@ class HouseItemDetails extends Component {
 }
 
 const HouseItemDetailsWithData = graphql(query, {
-  options: ({
-      variables:{
-          propertyid:  2 //window.location.pathname.substring(window.location.pathname.lastIndexOf('/')+1)
-      }
-  })
-}) (HouseItemDetails)
+  options: ownProps => ({variables: {propertyid: ownProps.match.params.propertyId}}),
+})(HouseItemDetails);
 
-export default HouseItemDetailsWithData;
+export default withRouter(HouseItemDetailsWithData);
