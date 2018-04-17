@@ -24,8 +24,8 @@ const client = new ApolloClient({
 class App extends Component {
   render() {
     return (
+    <Router>
       <ApolloProvider client={client}>
-        <Router>
           <div className="App">
             <Header></Header>
             <NavBar/>
@@ -34,8 +34,8 @@ class App extends Component {
               <Route path="/propertyID/:propertyId" component={HouseItemDetails}/>
             </Container>
           </div>
-        </Router>
       </ApolloProvider>
+    </Router>
     );
   }
 }
