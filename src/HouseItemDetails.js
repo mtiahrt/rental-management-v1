@@ -1,52 +1,129 @@
 import React, { Component } from 'react';
 import {graphql } from 'react-apollo'
 import gql from "graphql-tag";
-import { Jumbotron, Button} from 'reactstrap';
-import {withRouter} from 'react-router-dom'
+import { Jumbotron, Card, Button, CardImg, CardTitle, CardText,
+  CardSubtitle, CardBody, Col, InputGroup, Input, InputGroupButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {withRouter} from 'react-router-dom';
+import TenantItem from './TenantItem';
 
-let data
-const query = gql`query(
-    $propertyid: Int!
-  )
-  {
-    propertyByPropertyid(propertyid: $propertyid){
-      propertyid
-      propertyaddress
-      propertycity
-      propertyunitsByPropertyid{
-        edges{
-          node{
-            numberofbedrooms
-            description
-            unitnumber
-            unitid
+const query = gql `query(
+  $propertyid: Int!
+)
+{
+  propertyByPropertyid(propertyid: $propertyid){
+    propertyid
+    propertyaddress
+    propertycity
+    propertystate
+    propertyunitsByPropertyid(condition: {flagdeleted: false}){
+      edges{
+        node{
+          numberofbedrooms
+          description
+          unitnumber
+          unitid
+          leasesByUnitid(condition: {flagdeleted: false}){
+            edges{
+              node{
+                leaseid
+                unitid
+                rentamount
+                starttime
+                endtime
+                tenantsByLeaseid(condition: {flagdeleted: false}){
+                  edges{
+                    node{
+                      tenantid
+                      leaseid
+                      nameid
+                      parentalguarantee
+                      nameByNameid{
+												nameid
+                        firstname
+                        lastname
+                      }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
   }`
+
 class HouseItemDetails extends Component {
+constructor(props){
+  super(props)
+
+  this.toggleDropDown = this.toggleDropDown.bind(this);
+  this.state = {
+    dropdownOpen: false,
+    unitDescription: ''
+  };
+}
+
+toggleDropDown(args) {
+  this.setState({
+    dropdownOpen: !this.state.dropdownOpen
+  });
+
+  this.state.dropdownOpen &&
+    this.setState({
+      unitDescription: args.target.firstChild.data
+    }) 
+}
+
+  getTotalBedroomCount(receivedArray) {
+    return receivedArray.reduce((prev, cur) => {
+      return cur.node.numberofbedrooms + prev
+    },0)
+  }
+
     render(){
-        data = this.props.data
+        let data = this.props.data
         if (data.loading) {
             return <div>Loading...</div>
           }
           if (data.error) {
             return <div>{data.error}</div>
           }
-        return(<div>      <Jumbotron>
-            <h1 className="display-3">Hello, world!</h1>
-            <p className="lead">This is a simple hero unit, a simple Jumbotron-style component for calling extra attention to featured content or information.</p>
+          data = this.props.data.propertyByPropertyid;
+        return(
+        <div>      
+          <Jumbotron>
+            <h1 className="display-9">{data.propertyaddress}</h1>
+            <h1 className="display-9">{data.propertycity}, {data.propertystate}</h1>
             <hr className="my-2" />
-            <p>It uses utility classes for typgraphy and spacing to space content out within the larger container.</p>
+            <p>This property is has {data.propertyunitsByPropertyid.edges.length} units with {this.getTotalBedroomCount(data.propertyunitsByPropertyid.edges)} bedrooms</p>
             <p className="lead">
               <Button color="primary">Learn More</Button>
             </p>
           </Jumbotron>
-                    <div>Router property id {this.props.match.params.propertyId}</div>   
-                      <div>query id {data.propertyByPropertyid.propertyid}</div>
-                </div>
-                )
+          <div>
+          <InputGroup>
+            <Input value={this.state.unitDescription} />
+            <InputGroupButtonDropdown addonType="append" isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
+              <DropdownToggle caret>
+                Units
+              </DropdownToggle>
+              <DropdownMenu>
+                {data.propertyunitsByPropertyid.edges.map(item => {
+                  return <DropdownItem key={item.node.unitid}>{item.node.description}</DropdownItem>
+                })}
+              </DropdownMenu>
+            </InputGroupButtonDropdown>
+          </InputGroup>
+          </div>
+          <br/>
+          <div>
+            <h2>Current Tenants</h2>
+            {}
+          </div>
+        </div>
+)
     }  
 }
 
