@@ -6,6 +6,8 @@ import { Jumbotron, Card, Button, CardImg, CardTitle, CardText,
 import {withRouter} from 'react-router-dom';
 import TenantItem from './TenantItem';
 
+let data;
+let tenants;
 const query = gql `query(
   $propertyid: Int!
 )
@@ -28,8 +30,6 @@ const query = gql `query(
                 leaseid
                 unitid
                 rentamount
-                starttime
-                endtime
                 tenantsByLeaseid(condition: {flagdeleted: false}){
                   edges{
                     node{
@@ -41,6 +41,7 @@ const query = gql `query(
 												nameid
                         firstname
                         lastname
+                        isMale
                       }
                       }
                     }
@@ -54,27 +55,40 @@ const query = gql `query(
     }
   }`
 
+
 class HouseItemDetails extends Component {
-constructor(props){
-  super(props)
+  constructor(props){
+    super(props)
 
-  this.toggleDropDown = this.toggleDropDown.bind(this);
-  this.state = {
-    dropdownOpen: false,
-    unitDescription: ''
-  };
-}
+    this.toggleDropDown = this.toggleDropDown.bind(this);
+    this.state = {
+      dropdownOpen: false,
+      unitId: -1,
+      unitDescription: ''
+    };
+  }
 
-toggleDropDown(args) {
-  this.setState({
-    dropdownOpen: !this.state.dropdownOpen
-  });
-
-  this.state.dropdownOpen &&
+  toggleDropDown(args) {
     this.setState({
-      unitDescription: args.target.firstChild.data
-    }) 
-}
+      dropdownOpen: !this.state.dropdownOpen
+    });
+
+    if (this.state.dropdownOpen){
+      this.setState({unitDescription: args.target.firstChild.data}) 
+      this.getTenants();
+    }
+
+  }
+  getTenants() {
+    let unitid = data.data.propertyunitsByPropertyid.edges.find(item => {
+      if (item.node.description === this.state.unitDescription){
+        return item.node.unitid
+      }
+    })
+    tenants = data.map (item => {
+      return <TenantItem TenantItem={item}/>
+    })
+  }
 
   getTotalBedroomCount(receivedArray) {
     return receivedArray.reduce((prev, cur) => {
@@ -83,7 +97,7 @@ toggleDropDown(args) {
   }
 
     render(){
-        let data = this.props.data
+        data = this.props.data
         if (data.loading) {
             return <div>Loading...</div>
           }
