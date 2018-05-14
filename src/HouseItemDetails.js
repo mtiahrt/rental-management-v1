@@ -83,18 +83,22 @@ class HouseItemDetails extends Component {
 
     if (this.state.dropdownOpen){
       this.setState({unitDescription: args.target.firstChild.data}) 
-      this.getTenants();
+      this.getTenants(args.target.firstChild.data);
     }
 
   }
-  getTenants() {
-    let unitid = data.data.propertyunitsByPropertyid.edges.find(item => {
-      if (item.node.description === this.state.unitDescription){
+  getTenants(unitDescription) {
+    //
+    let unit = data.propertyunitsByPropertyid.edges.find(item => {
+      if (item.node.description === unitDescription){
         return item.node.unitid
       }
     })
-    tenants = data.map (item => {
-      return <TenantItem TenantItem={item}/>
+
+    tenants = unit.node.leasesByUnitid.edges[0].node.tenantsByLeaseid.edges.map (item => {
+      return <TenantItem tenantid={item.node.tenantid}
+              firstname={item.node.nameByNameid.firstname}
+              lastname = {item.node.nameByNameid.lastname}/>
     })
   }
 
@@ -143,7 +147,7 @@ class HouseItemDetails extends Component {
           <br/>
           <div>
             <h2>Current Tenants</h2>
-            {}
+            {tenants}
           </div>
         </div>
 )
@@ -157,4 +161,3 @@ const HouseItemDetailsWithData = graphql(query, {
 })(HouseItemDetails);
 
 export default withRouter(HouseItemDetailsWithData);
-// export default HouseItemDetails;
