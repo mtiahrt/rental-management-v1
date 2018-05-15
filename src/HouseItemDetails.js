@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {graphql } from 'react-apollo'
 import gql from "graphql-tag";
-import { Jumbotron, Card, Button, CardImg, CardTitle, CardText,
+import { Row,Jumbotron, Card, Button, CardImg, CardTitle, CardText,
   CardSubtitle, CardBody, Col, InputGroup, Input, InputGroupButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import {withRouter} from 'react-router-dom';
 import TenantItem from './TenantItem';
@@ -88,18 +88,19 @@ class HouseItemDetails extends Component {
 
   }
   getTenants(unitDescription) {
-    //
+    // get the unit that was selected first
     let unit = data.propertyunitsByPropertyid.edges.find(item => {
       if (item.node.description === unitDescription){
         return item.node.unitid
       }
     })
-
+    // get the tenants living in that unit
     tenants = unit.node.leasesByUnitid.edges[0].node.tenantsByLeaseid.edges.map (item => {
-      return <TenantItem tenantid={item.node.tenantid}
+      return <Col sm="4" key={item.node.tenantid}><TenantItem tenantid={item.node.tenantid}
               firstname={item.node.nameByNameid.firstname}
               lastname = {item.node.nameByNameid.lastname}/>
-    })
+             </Col>
+    }) 
   }
 
   getTotalBedroomCount(receivedArray) {
@@ -116,7 +117,6 @@ class HouseItemDetails extends Component {
           if (data.error) {
             return <div>{data.error}</div>
           }
-          // data = this.props.data.propertyByPropertyid;
           data = data.propertyByPropertyid
         return(
         <div>      
@@ -130,24 +130,28 @@ class HouseItemDetails extends Component {
             </p>
           </Jumbotron>
           <div>
-          <InputGroup>
-            <Input value={this.state.unitDescription} />
-            <InputGroupButtonDropdown addonType="append" isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
-              <DropdownToggle caret>
-                Units
-              </DropdownToggle>
-              <DropdownMenu>
-                {data.propertyunitsByPropertyid.edges.map(item => {
-                  return <DropdownItem key={item.node.unitid}>{item.node.description}</DropdownItem>
-                })}
-              </DropdownMenu>
-            </InputGroupButtonDropdown>
-          </InputGroup>
+            <InputGroup>
+              <Input value={this.state.unitDescription} />
+              <InputGroupButtonDropdown addonType="append" isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
+                <DropdownToggle caret>
+                  Units
+                </DropdownToggle>
+                <DropdownMenu>
+                  {data.propertyunitsByPropertyid.edges.map(item => {
+                    return <DropdownItem key={item.node.unitid}>{item.node.description}</DropdownItem>
+                  })}
+                </DropdownMenu>
+              </InputGroupButtonDropdown>
+            </InputGroup>
           </div>
           <br/>
           <div>
             <h2>Current Tenants</h2>
+            <div>
+            <Row>
             {tenants}
+            </Row>
+            </div>
           </div>
         </div>
 )
