@@ -97,8 +97,9 @@ class HouseItemDetails extends Component {
     // get the tenants living in that unit
     tenants = unit.node.leasesByUnitid.edges[0].node.tenantsByLeaseid.edges.map (item => {
       return <Col sm="4" key={item.node.tenantid}><TenantItem tenantid={item.node.tenantid}
-              firstname={item.node.nameByNameid.firstname}
-              lastname = {item.node.nameByNameid.lastname}/>
+                firstname = {item.node.nameByNameid.firstname}
+                lastname = {item.node.nameByNameid.lastname}
+                ismale = {item.node.nameByNameid.isMale}/>
              </Col>
     }) 
   }
