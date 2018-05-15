@@ -149,7 +149,7 @@ class HouseItemDetails extends Component {
           <div>
             <h2>Current Tenants</h2>
             <div>
-            <Row>
+            <Row className="tenant-img">
             {tenants}
             </Row>
             </div>

@@ -4,11 +4,18 @@ import { Card, Button, CardImg, CardTitle, CardText,
 import './HouseItem.css';
 
     
+const imgStyle = {
+    maxheight: "150px", 
+    maxwidth: "100px",
+    marginleft: "auto",
+    marginright: "auto",
+    margintop: "10px"
+}
 class HouseItem extends Component {
     render(){
         return(      
         <Card id ={this.props.houseItem.propertyid}>
-            <CardImg top width="100%" src={this.props.houseItem.imageurl} alt="Card image cap" />          
+            <CardImg style={imgStyle} top src={this.props.houseItem.imageurl} alt="Card image cap" />          
             <CardBody>
                 <CardTitle>{this.props.houseItem.propertyaddress}</CardTitle>
                 <CardSubtitle>{this.props.houseItem.propertycity}, {this.props.houseItem.propertystate}</CardSubtitle>
@@ -21,3 +28,19 @@ class HouseItem extends Component {
 }
 
 export default HouseItem;
+
+
+
+// let hoursCounterStyle = {
+//     width: "40%",
+//     display: 'inline-block',
+//     color: 'white',
+//     marginBottom: '20px',
+//     fontSize: '20px',
+//     lineHeight: '30px',
+//     color: isTooLow ? 'red': 'white',
+//     fontWeight: isTooLow ? 'bold': 'normal'
+//   }
+
+// return(
+//   <div style={hoursCounterStyle}>
